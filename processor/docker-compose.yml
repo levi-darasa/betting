@@ -9,5 +9,5 @@ services:
       - shared_network
 
 networks:
-  docker_shared_network:
-    external: true
+  shared_network:
+    driver: bridge
