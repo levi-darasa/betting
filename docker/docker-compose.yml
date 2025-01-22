@@ -24,7 +24,7 @@ services:
       - shared_network
     restart: unless-stopped
   rabbitmq:
-    image: rabbitmq:3-management  # Use RabbitMQ image with the management plugin
+    image: docker.io/rabbitmq:3-management  # Use RabbitMQ image with the management plugin
     container_name: rabbitmq_server
     ports:
       - "5672:5672"  # Port for RabbitMQ (AMQP protocol)
