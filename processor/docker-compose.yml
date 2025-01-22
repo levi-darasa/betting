@@ -44,8 +44,22 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=admin
+      - SPRING_DATA_MONGODB_PASSWORD=admin
+      - SPRING_RABBITMQ_HOST=rabbitmq_server
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+      - SPRING_REDIS_HOST=dragonfly
+      - SPRING_REDIS_PORT=6379
     networks:
       - shared_network
+    depends_on:
+      - mongo
+      - rabbitmq
+      - dragonfly
 
 volumes:
   rabbitmq_data:
