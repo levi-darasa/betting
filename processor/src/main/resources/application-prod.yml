@@ -11,13 +11,13 @@ spring:
     web-application-type: reactive
   data:
     redis:
-      host: dragonfly
+      host: localhost
       port: 6380
     mongodb:
-      uri: mongodb://admin:admin@mongo:27017/betting?authSource=admin
+      uri: mongodb://admin:admin@localhost:27017/betting?authSource=admin
 
   rabbitmq:
-    host: rabbitmq
+    host: localhost
     port: 5672
     username: admin
     password: admin
