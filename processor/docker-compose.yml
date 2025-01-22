@@ -47,6 +47,12 @@ services:
     networks:
       - shared_network
 
+volumes:
+  rabbitmq_data:
+  mongo_data:
+  dragonfly-data:
+
+
 networks:
   shared_network:
     driver: bridge
