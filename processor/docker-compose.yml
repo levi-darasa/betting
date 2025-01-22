@@ -6,8 +6,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     networks:
-      - springboot-network
+      - shared_network
 
 networks:
-  springboot-network:
-    driver: bridge
+  shared_network:
+    external: true

@@ -6,6 +6,8 @@ services:
       - "6380:6379" # Exposes the Dragonfly port on localhost
     command: >
       --bind 0.0.0.0
+    networks:
+      - shared_network
     volumes:
       - dragonfly-data:/data # Optional: Persistence if enabled in future
     restart: unless-stopped
@@ -32,6 +34,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: admin  # Default username
       RABBITMQ_DEFAULT_PASS: admin  # Default password
+    networks:
+      - shared_network
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
 
