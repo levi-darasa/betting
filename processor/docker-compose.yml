@@ -1,4 +1,43 @@
 services:
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: dragonfly
+    ports:
+      - "6380:6379" # Exposes the Dragonfly port on localhost
+    command: >
+      --bind 0.0.0.0
+    networks:
+      - shared_network
+    volumes:
+      - dragonfly-data:/data # Optional: Persistence if enabled in future
+    restart: unless-stopped
+
+  mongo:
+    image: docker.io/mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - shared_network
+    restart: unless-stopped
+  rabbitmq:
+    image: docker.io/rabbitmq:3-management  # Use RabbitMQ image with the management plugin
+    container_name: rabbitmq_server
+    ports:
+      - "5672:5672"  # Port for RabbitMQ (AMQP protocol)
+      - "15672:15672"  # Port for RabbitMQ Management Plugin (Web UI)
+    environment:
+      RABBITMQ_DEFAULT_USER: admin  # Default username
+      RABBITMQ_DEFAULT_PASS: admin  # Default password
+    networks:
+      - shared_network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
   spring-boot-webflux-app:
     build: .
     ports:
