@@ -23,10 +23,22 @@ services:
     networks:
       - shared_network
     restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management  # Use RabbitMQ image with the management plugin
+    container_name: rabbitmq_server
+    ports:
+      - "5672:5672"  # Port for RabbitMQ (AMQP protocol)
+      - "15672:15672"  # Port for RabbitMQ Management Plugin (Web UI)
+    environment:
+      RABBITMQ_DEFAULT_USER: admin  # Default username
+      RABBITMQ_DEFAULT_PASS: admin  # Default password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
 
 volumes:
   dragonfly-data:
   mongo_data:
+  rabbitmq_data:
 
 networks:
   shared_network:
