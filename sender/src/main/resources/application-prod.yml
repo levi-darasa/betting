@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: always
+spring:
+  application:
+    name: sender
+  jmx:
+    enabled: false
+  main:
+    web-application-type: reactive
+
+logging:
+  level:
+    reactor:
+      core:
+        publisher:
+          Hooks: trace
+grpc:
+  client:
+    bet-service:
+      address: localhost:19090
+      negotiation-type: plaintext

@@ -1,0 +1,42 @@
+server:
+  port: 8081
+  error:
+    include-stacktrace: always
+spring:
+  application:
+    name: processor
+  jmx:
+    enabled: false
+  main:
+    web-application-type: reactive
+  data:
+    redis:
+      host: localhost
+      port: 6380
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/betting?authSource=admin
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+rabbitmq:
+  consumer:
+    prefetch: 1
+    concurrency: 1
+
+
+grpc:
+  server:
+    port: 19090
+
+
+rabbit:
+  queues:
+    balance-update: balance-update-queue
+  exchanges:
+    balance-update: balance-update-exchange
+  keys:
+    balance-update: balance-update-routingKey

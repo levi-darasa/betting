@@ -1,0 +1,33 @@
+services:
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: dragonfly
+    ports:
+      - "6380:6379" # Exposes the Dragonfly port on localhost
+    command: >
+      --bind 0.0.0.0
+    volumes:
+      - dragonfly-data:/data # Optional: Persistence if enabled in future
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - shared_network
+    restart: unless-stopped
+
+volumes:
+  dragonfly-data:
+  mongo_data:
+
+networks:
+  shared_network:
+    driver: bridge
