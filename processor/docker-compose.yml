@@ -9,5 +9,5 @@ services:
       - shared_network
 
 networks:
-  shared_network:
+  docker_shared_network:
     external: true
