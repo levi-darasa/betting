@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build project
-        run: mvn clean install -DskipTests
+        run: mvn clean install -U -DskipTests
 
       - name: Archive JAR files
         run: |
