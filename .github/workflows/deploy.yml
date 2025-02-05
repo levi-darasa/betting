@@ -4,35 +4,22 @@ on:
   push:
     branches:
       - main  # Trigger this action on pushes to the main branch
-  pull_request:
-    branches:
-      - main  # Also trigger when a PR is merged to main
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Using an Ubuntu runner for building
-
+    runs-on: ubuntu-latest  # Use GitHub-hosted runner for building
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Checkout the repository code
+        uses: actions/checkout@v4
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          java-version: '17'
           distribution: 'temurin'
-          java-version: '17'  # Adjust the Java version according to your project's requirements
-
-      #      - name: Build Sender Service
-      #        working-directory: ./sender  # Set the correct directory for the sender project
-      #        run: mvn clean install -DskipTests  # Build sender service
-      #
-      #      - name: Build Processor Service
-      #        working-directory: ./processor  # Set the correct directory for the processor project
-      #        run: mvn clean install -DskipTests  # Build processor service
 
       - name: Build project
-        run: mvn clean install -DskipTests  # Build processor service
-
+        run: mvn clean install -DskipTests
 
       - name: Archive JAR files
         run: |
@@ -40,34 +27,38 @@ jobs:
           cp sender/target/sender-*.jar build-artifacts/
           cp processor/target/processor-*.jar build-artifacts/
 
-      - name: Upload build artifacts (JAR files)
-        uses: actions/upload-artifact@v4
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: spring-boot-jars
           path: build-artifacts/
 
-  deploy:
-    runs-on: ubuntu-latest
+  #  deploy_sender:
+  #    runs-on: sender-runner  # Run this on Server 1
+  #    needs: build
+  #    steps:
+  #      - name: Download sender JAR
+  #        uses: actions/download-artifact@v3
+  #        with:
+  #          name: spring-boot-jars
+  #          path: build-artifacts/
+  #
+  #      - name: Deploy Sender Service
+  #        run: |
+  #          mv build-artifacts/sender-*.jar /home/gaconlonton/jars/
+  #          sudo systemctl restart sender  # Restart the sender service
 
-    needs: build  # Ensure deploy runs only after the build job is successful
-
+  deploy_processor:
+    runs-on: processor-runner  # Run this on Server 2
+    needs: build
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
+      - name: Download processor JAR
+        uses: actions/download-artifact@v3
         with:
           name: spring-boot-jars
           path: build-artifacts/
 
-      - name: Setup SSH Key
+      - name: Deploy Processor Service
         run: |
-          # Create a temporary SSH private key file from the GitHub secret
-          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > private_key
-          chmod 600 private_key  # Set the correct permissions for the key
-
-      - name: Copy JARs to the server
-        run: |
-          scp -P 22000 -i private_key build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
-
-      - name: SSH into server2 and restart processor service
-        run: |
-          ssh -p 22000 -i private_key gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
+          mv build-artifacts/processor-*.jar /home/gaconlonton/jars/
+          sudo systemctl restart processor  # Restart the processor service
