@@ -27,10 +27,11 @@ services:
       - mongo_data:/data/db
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "mongosh", "--eval", "db.runCommand('ping').ok" ]
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
       timeout: 5s
       retries: 3
+      start_period: 30s
 
   rabbitmq:
     image: docker.io/rabbitmq:3-management  # Use RabbitMQ image with the management plugin
@@ -45,7 +46,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:15672/api/healthchecks/node" ]
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
       interval: 10s
       timeout: 5s
       retries: 3
