@@ -58,14 +58,19 @@ jobs:
           name: spring-boot-jars
           path: build-artifacts/
 
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem  # Set the correct permissions for the key
+
       - name: Copy JARs to the server
         run: |
-          scp -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
+          scp -i private_key.pem build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
 
-      # - name: SSH into server1 and restart sender service
-      #   run: |
-      #     ssh -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} gaconlonton@${{ secrets.SERVER1_IP }} 'sudo systemctl restart processor'  # Restart service on Server 1
+      #      - name: SSH into server1 and restart sender service
+      #        run: |
+      #          ssh -i private_key.pem gaconlonton@${{ secrets.SERVER1_IP }} 'sudo systemctl restart processor'  # Restart service on Server 1
 
       - name: SSH into server2 and restart processor service
         run: |
-          ssh -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
+          ssh -i private_key.pem gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
