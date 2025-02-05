@@ -22,13 +22,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'  # Adjust the Java version according to your project's requirements
 
-      # - name: Build Sender Service
-      #   working-directory: ./sender  # Set the correct directory for the sender project
-      #   run: mvn clean install -DskipTests  # Build sender service
+      #      - name: Build Sender Service
+      #        working-directory: ./sender  # Set the correct directory for the sender project
+      #        run: mvn clean install -DskipTests  # Build sender service
+      #
+      #      - name: Build Processor Service
+      #        working-directory: ./processor  # Set the correct directory for the processor project
+      #        run: mvn clean install -DskipTests  # Build processor service
 
-      - name: Build Processor Service
-        working-directory: ./processor  # Set the correct directory for the processor project
+      - name: Build project
         run: mvn clean install -DskipTests  # Build processor service
+
 
       - name: Archive JAR files
         run: |
