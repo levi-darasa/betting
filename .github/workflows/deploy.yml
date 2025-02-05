@@ -66,8 +66,8 @@ jobs:
 
       - name: Copy JARs to the server
         run: |
-          scp -i private_key build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
+          scp -p 22000 -i private_key build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
 
       - name: SSH into server2 and restart processor service
         run: |
-          ssh -i private_key gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
+          ssh -p 22000 -i private_key gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
