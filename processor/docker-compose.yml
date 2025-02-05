@@ -6,11 +6,14 @@ services:
       - "6380:6379" # Exposes the Dragonfly port on localhost
     command: >
       --bind 0.0.0.0
-    networks:
-      - shared_network
     volumes:
       - dragonfly-data:/data # Optional: Persistence if enabled in future
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-h", "localhost", "-p", "6379", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   mongo:
     image: docker.io/mongo:latest
@@ -22,9 +25,13 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    networks:
-      - shared_network
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.runCommand('ping').ok" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   rabbitmq:
     image: docker.io/rabbitmq:3-management  # Use RabbitMQ image with the management plugin
     container_name: rabbitmq
@@ -34,17 +41,16 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: admin  # Default username
       RABBITMQ_DEFAULT_PASS: admin  # Default password
-    networks:
-      - shared_network
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data\
+      - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672/api/healthchecks/node" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
   rabbitmq_data:
   mongo_data:
   dragonfly-data:
-
-
-networks:
-  shared_network:
-    driver: bridge
