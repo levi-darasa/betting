@@ -1,0 +1,66 @@
+name: Build and Deploy Spring Boot Services
+
+on:
+  push:
+    branches:
+      - main  # Trigger this action on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Also trigger when a PR is merged to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Using an Ubuntu runner for building
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Checkout the repository code
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'  # Adjust the Java version according to your project's requirements
+
+    # - name: Build Sender Service
+    #   working-directory: ./sender  # Set the correct directory for the sender project
+    #   run: mvn clean install -DskipTests  # Build sender service
+
+    - name: Build Processor Service
+      working-directory: ./processor  # Set the correct directory for the processor project
+      run: mvn clean install -DskipTests  # Build processor service
+
+    - name: Archive JAR files
+      run: |
+        mkdir -p build-artifacts
+        cp sender/target/sender-*.jar build-artifacts/
+        cp processor/target/processor-*.jar build-artifacts/
+      
+    - name: Upload build artifacts (JAR files)
+      uses: actions/upload-artifact@v2
+      with:
+        name: spring-boot-jars
+        path: build-artifacts/
+    
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build  # Ensure deploy runs only after the build job is successful
+
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: spring-boot-jars
+        path: build-artifacts/
+
+    - name: Copy JARs to the server
+      run: |
+        scp -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
+
+    # - name: SSH into server1 and restart sender service
+    #   run: |
+    #     ssh -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} gaconlonton@${{ secrets.SERVER1_IP }} 'sudo systemctl restart processor'  # Restart service on Server 1
+
+    - name: SSH into server2 and restart processor service
+      run: |
+        ssh -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} gaconlonton@${{ secrets.SERVER2_IP }} 'sudo systemctl restart processor'  # Restart service on Server 2
