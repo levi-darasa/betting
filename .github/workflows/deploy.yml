@@ -33,21 +33,6 @@ jobs:
           name: spring-boot-jars
           path: build-artifacts/
 
-  #  deploy_sender:
-  #    runs-on: sender-runner  # Run this on Server 1
-  #    needs: build
-  #    steps:
-  #      - name: Download sender JAR
-  #        uses: actions/download-artifact@v4
-  #        with:
-  #          name: spring-boot-jars
-  #          path: build-artifacts/
-  #
-  #      - name: Deploy Sender Service
-  #        run: |
-  #          mv build-artifacts/sender-*.jar /home/gaconlonton/jars/
-  #          sudo systemctl restart sender  # Restart the sender service
-
   deploy_processor:
     runs-on: processor-runner  # Run this on Server 2
     needs: build
@@ -62,3 +47,18 @@ jobs:
         run: |
           mv build-artifacts/processor-*.jar /home/gaconlonton/jars/
           sudo systemctl restart processor  # Restart the processor service
+
+  deploy_sender:
+    runs-on: sender-runner  # Run this on Server 1
+    needs: build
+    steps:
+      - name: Download sender JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: spring-boot-jars
+          path: build-artifacts/
+
+      - name: Deploy Sender Service
+        run: |
+          mv build-artifacts/sender-*.jar /home/gaconlonton/jars/
+          sudo systemctl restart sender  # Restart the sender service

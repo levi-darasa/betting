@@ -29,6 +29,7 @@
         <reactor-grpc.version>1.2.4</reactor-grpc.version>
         <java.grpc.version>1.69.0</java.grpc.version>
         <lombok.version>1.18.36</lombok.version>
+        <grpc.version>1.63.0</grpc.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -37,6 +38,13 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
