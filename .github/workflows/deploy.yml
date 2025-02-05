@@ -66,7 +66,7 @@ jobs:
 
       - name: Copy JARs to the server
         run: |
-          scp -p 22000 -i private_key build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
+          scp -P 22000 -i private_key build-artifacts/processor-*.jar gaconlonton@${{ secrets.SERVER2_IP }}:/home/gaconlonton/jars/
 
       - name: SSH into server2 and restart processor service
         run: |
