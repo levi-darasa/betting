@@ -32,6 +32,15 @@ grpc:
   server:
     port: 19090
 
+management:
+  endpoint:
+    prometheus:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
 
 rabbit:
   queues:

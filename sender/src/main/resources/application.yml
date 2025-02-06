@@ -21,3 +21,12 @@ grpc:
     bet-service:
       address: localhost:19090
       negotiation-type: plaintext
+
+management:
+  endpoint:
+    prometheus:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
