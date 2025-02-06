@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-public class balanceGrpcService extends ReactorBalanceGrpc.BalanceImplBase {
+public class BalanceGrpcService extends ReactorBalanceGrpc.BalanceImplBase {
 
     private final BalanceService balanceService;
 

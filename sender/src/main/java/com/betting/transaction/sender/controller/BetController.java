@@ -21,8 +21,7 @@ public class BetController {
 
     @PostMapping("")
     public Mono<BalanceUpdateResponse> updateBalance(@RequestBody BalanceUpdateRequestDto requestDto) {
-//        return balanceClient.balanceUpdate(requestDto);
-        return Mono.empty();
+        return balanceClient.balanceUpdate(requestDto);
     }
 
     @GetMapping("")

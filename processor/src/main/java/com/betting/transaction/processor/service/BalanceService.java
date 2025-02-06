@@ -61,7 +61,7 @@ public class BalanceService {
                                         .action(action)
                                         .amountAfterUpdate(result)
                                         .build();
-                                rabbitMqTemplate.convertAndSend(balanceUpdateExchange, balanceUpdateKey, message);
+//                                rabbitMqTemplate.convertAndSend(balanceUpdateExchange, balanceUpdateKey, message);
                                 yield "Balance updated successfully: " + result;
                             }
                         })
