@@ -19,5 +19,5 @@ logging:
 grpc:
   client:
     bet-service:
-      address: dns:///18.166.28.18:19090
+      address: dns:///10.89.15.92:19090
       negotiation-type: plaintext
