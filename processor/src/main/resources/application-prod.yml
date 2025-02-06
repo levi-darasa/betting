@@ -13,24 +13,37 @@ spring:
     redis:
       host: localhost
       port: 6380
+      lettuce:
+        pool:
+          max-active: 50
+          max-idle: 20
+          min-idle: 5
+          max-wait: 1000ms
+    
     mongodb:
-      uri: mongodb://admin:admin@localhost:27017/betting?authSource=admin
+      uri: mongodb://admin:admin@localhost:27017/betting?authSource=admin&maxPoolSize=100
 
   rabbitmq:
     host: localhost
     port: 5672
     username: admin
     password: admin
+    publisher-confirm-type: correlated
+    publisher-returns: true
 
 rabbitmq:
   consumer:
-    prefetch: 1
-    concurrency: 1
+    prefetch: 50
+    concurrency: 10
 
 
 grpc:
   server:
     port: 19090
+    max-inbound-message-size: 10485760
+    keep-alive-timeout: 15s
+    permit-keep-alive-time: 10s
+
 
 
 rabbit:
