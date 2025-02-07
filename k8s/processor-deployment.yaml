@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processor
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: processor
+  template:
+    metadata:
+      labels:
+        app: processor
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - ip-10-89-15-92.ap-east-1.compute.internal  # Specify that processor runs on this node
+      containers:
+        - name: processor
+          image: ghcr.io/levi-darasa/betting/processor:latest
+          ports:
+            - containerPort: 8081  # HTTP Port for the Processor service
+            - containerPort: 19090 # gRPC Port for the Processor service
+          resources:
+            requests:
+              cpu: "13"
+              memory: "18Gi"
+            limits:
+              cpu: "20"
+              memory: "26Gi"

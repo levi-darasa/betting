@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: processor-grpc-service
+spec:
+  type: ClusterIP
+  selector:
+    app: processor
+  ports:
+    - protocol: TCP
+      port: 19090  # External port for gRPC access
+      targetPort: 19090  # Internal gRPC port
