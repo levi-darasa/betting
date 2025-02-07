@@ -3,8 +3,6 @@ server:
   error:
     include-stacktrace: always
 spring:
-  profiles:
-    active: prod
   application:
     name: sender
   jmx:
