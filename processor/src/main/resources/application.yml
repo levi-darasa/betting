@@ -31,6 +31,7 @@ rabbitmq:
 grpc:
   server:
     port: 19090
+    
 
 management:
   endpoint:
