@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sender
+  name: sender-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: sender
@@ -12,25 +12,26 @@ spec:
       labels:
         app: sender
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - ip-10-89-15-94.ap-east-1.compute.internal  # Specify that sender runs on this node
+      nodeSelector:
+        role: sender  # Ensure this pod runs only on the node labeled 'role=sender'
       containers:
         - name: sender
           image: ghcr.io/levi-darasa/betting/sender:latest
           ports:
             - containerPort: 8080
-          resources:
-            requests:
-              cpu: "13"
-              memory: "18Gi"
-            limits:
-              cpu: "20"
-              memory: "26Gi"
-
+          env:
+            - name: GRPC_HOST
+              value: "10.89.15.92:19090"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sender-service
+spec:
+  selector:
+    app: sender
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  clusterIP: None
