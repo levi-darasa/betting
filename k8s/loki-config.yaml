@@ -27,9 +27,9 @@ data:
             period: 24h
     storage_config:
       boltdb_shipper:
-        active_index_directory: /data/loki/index
+        active_index_directory: /tmp/loki/index
         shared_store: filesystem
-        cache_location: /data/loki/cache
+        cache_location: /tmp/loki/cache
     limits_config:
       enforce_metric_name: false
     chunk_store_config:
