@@ -22,16 +22,3 @@ spec:
           env:
             - name: GRPC_HOST
               value: "10.89.15.92:19090"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sender-service
-spec:
-  selector:
-    app: sender
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer  # Exposes the service externally
