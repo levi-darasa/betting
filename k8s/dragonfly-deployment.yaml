@@ -16,7 +16,7 @@ spec:
         role: processor
       containers:
         - name: dragonfly
-          image: dragonfly/dragonfly:latest
+          image: docker.dragonflydb.io/dragonflydb/dragonfly
           ports:
             - containerPort: 6380
 ---
