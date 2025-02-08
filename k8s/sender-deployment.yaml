@@ -26,3 +26,16 @@ spec:
             limits:
               cpu: "20"
               memory: "26Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sender-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: sender
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
