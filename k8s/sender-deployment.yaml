@@ -13,7 +13,7 @@ spec:
         app: sender
     spec:
       nodeSelector:
-        role: sender  # Ensure this pod runs only on the node labeled 'role=sender'
+        role: sender  # Ensures this pod runs only on the node labeled 'role=sender'
       containers:
         - name: sender
           image: ghcr.io/levi-darasa/betting/sender:latest
@@ -34,4 +34,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  clusterIP: None
+  type: LoadBalancer  # Exposes the service externally
