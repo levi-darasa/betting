@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: processor-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: processor
@@ -19,6 +19,13 @@ spec:
           image: ghcr.io/levi-darasa/betting/processor:latest
           ports:
             - containerPort: 8081
+          resources:
+            requests:
+              cpu: "20"
+              memory: "37Gi"
+            limits:
+              cpu: "32"
+              memory: "60Gi"
 ---
 apiVersion: v1
 kind: Service
