@@ -23,10 +23,11 @@ spec:
             - name: config
               mountPath: /etc/loki
             - name: data
-              mountPath: /data/loki
+              mountPath: /data/loki  # Mount persistent storage
       volumes:
         - name: config
           configMap:
             name: loki-config
         - name: data
-          emptyDir: { }
+          persistentVolumeClaim:
+            claimName: loki-pvc  # Use PVC for storage
