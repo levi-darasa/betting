@@ -12,15 +12,8 @@ spec:
       labels:
         app: sender
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - ip-10-89-15-94.ap-east-1.compute.internal  # Specify that sender runs on this node
+      nodeSelector:
+        role: sender
       containers:
         - name: sender
           image: ghcr.io/levi-darasa/betting/sender:latest

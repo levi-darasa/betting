@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sender-deployment
+  name: sender
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: sender
@@ -13,12 +13,16 @@ spec:
         app: sender
     spec:
       nodeSelector:
-        role: sender  # Ensures this pod runs only on the node labeled 'role=sender'
+        role: sender
       containers:
         - name: sender
           image: ghcr.io/levi-darasa/betting/sender:latest
           ports:
             - containerPort: 8080
-          env:
-            - name: GRPC_HOST
-              value: "10.89.15.92:19090"
+          resources:
+            requests:
+              cpu: "13"
+              memory: "18Gi"
+            limits:
+              cpu: "20"
+              memory: "26Gi"
