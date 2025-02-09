@@ -19,7 +19,7 @@ logging:
 grpc:
   client:
     bet-service:
-      address: processor-grpc-service:32076
+      address: processor-grpc-service:19090
       negotiation-type: plaintext
       max-inbound-message-size: 10485760  # 10MB
       keep-alive-time: 30s
