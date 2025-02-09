@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dragonfly-deployment
+  name: dragonfly
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
         - name: dragonfly
           image: docker.dragonflydb.io/dragonflydb/dragonfly
           ports:
-            - containerPort: 6380
+            - containerPort: 6379
 ---
 apiVersion: v1
 kind: Service
@@ -29,6 +29,6 @@ spec:
     app: dragonfly
   ports:
     - protocol: TCP
-      port: 6380
-      targetPort: 6380
-  clusterIP: None
+      port: 6379
+      targetPort: 6379
+  type: LoadBalancer

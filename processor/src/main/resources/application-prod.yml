@@ -11,7 +11,7 @@ spring:
     web-application-type: reactive
   data:
     redis:
-      host: dragonfly-service.default.svc.cluster.local
+      host: dragonfly-service
       port: 6380
       lettuce:
         pool:
@@ -21,10 +21,10 @@ spring:
           max-wait: 1000ms
     
     mongodb:
-      uri: mongodb://admin:admin@mongo-service.default.svc.cluster.local:27017/betting?authSource=admin&maxPoolSize=100
+      uri: mongodb://admin:admin@mongo-service:27017/betting?authSource=admin&maxPoolSize=100
 
   rabbitmq:
-    host: rabbitmq-service.default.svc.cluster.local
+    host: rabbitmq-service
     port: 5672
     username: admin
     password: admin
