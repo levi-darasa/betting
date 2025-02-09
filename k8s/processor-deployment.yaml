@@ -19,6 +19,7 @@ spec:
           image: ghcr.io/levi-darasa/betting/processor:latest
           ports:
             - containerPort: 8081
+            - containerPort: 19090
           resources:
             requests:
               cpu: "16"
@@ -36,7 +37,19 @@ spec:
     app: processor
   ports:
     - protocol: TCP
-      name: grpc
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: processor-grpc-service
+spec:
+  selector:
+    app: processor
+  ports:
+    - protocol: TCP
       port: 19090
       targetPort: 19090
   type: LoadBalancer
